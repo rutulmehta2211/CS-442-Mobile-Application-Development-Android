@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Andorid Notes</string>
+    <string name="file_name">Notes.json</string>
+    <string name="no_file">No JSON Note File Present</string>
+    <string name="saved">Notes Saved!</string>
+    <string name="no_data">Title should not be Empty !!</string>
+    <string name="yes_confirm_button">YES</string>
+    <string name="no_confirm_button">NO</string>
+    <string name="confirm_alert_title">Your note is not saved!</string>
+    <string name="confirm_alert_message">Save note</string>
+    <string name="ok_confirm_button">OK</string>
+    <string name="cancel_confirm_button">CANCEL</string>
+    <string name="empty_title_alert_title">Empty Title !!</string>
+    <string name="empty_title_alert_message">Title should not be empty.</string>
+    <string name="version_1_0">Version 1.0</string>
+    <string name="multi_notes">Multi Notes</string>
+    <string name="copy_right">© %s, Rutul Mehta</string>
+    <string name="delete_note_title">Delete note</string>
+
+</resources>

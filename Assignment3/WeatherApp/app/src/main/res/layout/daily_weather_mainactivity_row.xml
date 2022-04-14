@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/linearLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="#9da2d9"
+    android:layout_height="175dp">
+
+    <TextView
+        android:id="@+id/txtDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="Today"/>
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="2:00 Pm"/>
+
+    <ImageView
+        android:id="@+id/imgWeather"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:src="@drawable/_04d"/>
+
+    <TextView
+        android:id="@+id/txtTemperature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="76 F"/>
+
+    <TextView
+        android:id="@+id/txtDescriptionDayWeatherRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="Overcast Clouds"/>
+
+</LinearLayout>

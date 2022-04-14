@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">OpenWeather App</string>
+    <string name="menu_unit">Units</string>
+    <string name="menu_calender">Calender</string>
+    <string name="menu_location">Location</string>
+    <string name="main_location">Chicago,Illinois</string>
+    <string name="main_datetime">Thu, Sep 30 9:51Pm, 2021</string>
+    <string name="main_nointernet">\nNo Internet Connection</string>
+    <string name="main_temp">72 F</string>
+    <string name="main_tempfeelslike">Feels like 71 F</string>
+    <string name="main_weatherdescription">Broken Clouds (75% Clouds)</string>
+    <string name="main_windinfo">Winds : E at 5 mph</string>
+    <string name="main_uvindex">UV Index : 51% </string>
+    <string name="main_uv_index">UV Index : 51%</string>
+    <string name="main_visibility">Visibility : 6.2 Miles</string>
+    <string name="main_morning_temp">72 F</string>
+    <string name="main_morning_time">8am</string>
+    <string name="main_noon_temp">72 F</string>
+    <string name="main_noon_time">1pm</string>
+    <string name="main_evening_temp">72 F</string>
+    <string name="main_evening_time">5pm</string>
+    <string name="main_night_temp">72 F</string>
+    <string name="main_night_time">11pm</string>
+    <string name="main_sunrise">Sunrise : 6:46 Am</string>
+    <string name="main_sunset">Sunset 6:34 Pm</string>
+    <string name="main_humidity">Humidity : 51%</string>
+    <string name="no_internet_msg">No Internet Connection</string>
+    <string name="dialogue_title">"Enter Location"</string>
+    <string name="dialogue_message">"For US Location, enter as 'City', or 'City, State'\n For international  locations enter as 'City,Country'"</string>
+    <string name="invalid_city_name">"City name is not valid !!"</string>
+</resources>

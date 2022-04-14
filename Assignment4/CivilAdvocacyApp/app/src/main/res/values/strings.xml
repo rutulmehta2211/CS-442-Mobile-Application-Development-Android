@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Know Your Government</string>
+    <string name="menu_info">Info</string>
+    <string name="menu_search">Search</string>
+    <string name="main_location">Chicago, IL 60601</string>
+    <string name="dialog_title">Enter Address</string>
+    <string name="main_invalid_location">Please enter valid location !!</string>
+    <string name="no_internet">No Internet Connection.</string>
+    <string name="no_location_permission">Data can not be accessed/loaded without location access permission.</string>
+    <string name="no_internet_dialog_msg">Data can not be accessed/loaded without an internet connection.</string>
+    <string name="no_location">No Data For Location</string>
+    <string name="official_office">U.S. Senator</string>
+    <string name="official_name">Tammy Duckworth</string>
+    <string name="official_party">(Democratic party)</string>
+    <string name="official_address">Address:</string>
+    <string name="phonelabel_official">Phone:</string>
+    <string name="emaillabel_official">Email:</string>
+    <string name="websitelabel_official">Website:</string>
+    <string name="nodata_officials">No data for this officials</string>
+</resources>
