@@ -17,4 +17,12 @@
     <string name="emaillabel_official">Email:</string>
     <string name="websitelabel_official">Website:</string>
     <string name="nodata_officials">No data for this officials</string>
+    <string name="providedbylabel_about">Data provided by</string>
+    <string name="version_number">Version 1.0</string>
+    <string name="googlecivicinfoapilabel_about"><u>Google Civic Information API</u></string>
+    <string name="civil_advocacy_about">Civil Advocacy</string>
+    <string name="nophoto_officials">No photo for this officials</string>
+    <string name="noemailclient_officials">There is no application exist to send an email.</string>
+    <string name="nocallapplication_officials">There is no application exist to make a call.</string>
+    <string name="nomapapplication_official">There is no application (map) to open address.</string>
 </resources>

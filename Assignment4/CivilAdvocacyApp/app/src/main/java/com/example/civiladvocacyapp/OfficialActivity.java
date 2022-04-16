@@ -3,14 +3,22 @@ package com.example.civiladvocacyapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -22,9 +30,9 @@ public class OfficialActivity extends AppCompatActivity {
     private static final String TAG = "OfficialActivity";
     private Picasso picasso;
 
-    Offices offices;
     Officials officials;
     String location;
+    String officeName;
 
     ScrollView scrollView;
     ConstraintLayout constraintLayout;
@@ -54,7 +62,10 @@ public class OfficialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_official);
+        getSupportActionBar().setTitle(R.string.civil_advocacy_about);
         picasso = Picasso.get();
+        picasso.setIndicatorsEnabled(true);
+        picasso.setLoggingEnabled(true);
         InitializeControls();
         LoadData();
     }
@@ -81,12 +92,13 @@ public class OfficialActivity extends AppCompatActivity {
         imgyoutube_official = findViewById(R.id.imgyoutube_official);
     }
 
+    @SuppressLint("SetTextI18n")
     private void LoadData() {
         officials = (Officials) getIntent().getSerializableExtra("officialData");
-        offices = (Offices) getIntent().getSerializableExtra("officeData");
+        officeName = getIntent().getStringExtra("officeName").toString();
         location = getIntent().getStringExtra("location");
         txtLocation_official.setText(location);
-        txtoffice_official.setText(offices.getOffices_name());
+        txtoffice_official.setText(officeName);
         txtname_official.setText(officials.getOfficials_name());
         if(officials.getOfficials_party().toUpperCase().contains("DEMOCRATIC")){
             txtparty_official.setVisibility(View.VISIBLE);
@@ -113,7 +125,7 @@ public class OfficialActivity extends AppCompatActivity {
         if(officials.getOfficials_address()!=null && !officials.getOfficials_address().isEmpty()){
             txtaddresslabel_official.setVisibility(View.VISIBLE);
             txtaddress_official.setVisibility(View.VISIBLE);
-            txtaddress_official.setText(officials.getOfficials_address());
+            txtaddress_official.setText(officials.getOfficials_address() + " " + officials.getOfficials_city() + ", " + officials.getOfficials_state() + " " + officials.getOfficials_zip());
         }
         else{
             txtaddresslabel_official.setVisibility(View.INVISIBLE);
@@ -166,13 +178,12 @@ public class OfficialActivity extends AppCompatActivity {
                     }
                 }
             }
-        } else {
         }
     }
 
     private void loadRemoteImage(String imageURL) {
         try {
-            String temp = imageURL;
+            Log.d(TAG, "loadRemoteImage: "+imageURL);
             picasso.load(imageURL)
                     .error(R.drawable.missing)
                     .placeholder(R.drawable.placeholder)
@@ -184,29 +195,171 @@ public class OfficialActivity extends AppCompatActivity {
     }
 
     public void OnImageClicked(View view) {
+        if (officials != null && officials.getOfficials_photourl()!=null && !officials.getOfficials_photourl().isEmpty()) {
+            Intent intent = new Intent(this, PhotoActivity.class);
+            intent.putExtra("officeName",officeName);
+            intent.putExtra("officialData", officials);
+            intent.putExtra("location", location);
+            startActivity(intent);
+        } else {
+            Toast.makeText(OfficialActivity.this, R.string.nophoto_officials, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void OnPartyLogoClicked(View view) {
+        if(officials!=null && !officials.getOfficials_party().isEmpty()){
+            String partyUrl="";
+            if (officials.getOfficials_party().toUpperCase().contains("DEMOCRATIC")) {
+                partyUrl = "https://democrats.org/";
+            }
+            else if (officials.getOfficials_party().toUpperCase().contains("REPUBLICAN")) {
+                partyUrl = "https://www.gop.com/";
+            }
+            openUrl(partyUrl);
+        }
     }
 
     public void OnAddressClicked(View view) {
+        if(officials!=null && !officials.getOfficials_address().isEmpty()){
+            String address = officials.getOfficials_address() + " " + officials.getOfficials_city() + ", " + officials.getOfficials_state() + " " + officials.getOfficials_zip();
+            Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+            Intent intent = new Intent(Intent.ACTION_VIEW, mapUri);
+            intent.setPackage("com.google.android.apps.maps");
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(OfficialActivity.this, R.string.nomapapplication_official, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void OnPhoneClicked(View view) {
+        if(officials!=null && !officials.getOfficials_phone().isEmpty()){
+            String number = officials.getOfficials_phone();
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + number));
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(OfficialActivity.this, R.string.nocallapplication_officials, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void OnEmailClicked(View view) {
+        if (officials!=null && !officials.getOfficials_email().isEmpty()) {
+            String[] addresses = new String[]{officials.getOfficials_email()};
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(OfficialActivity.this, R.string.noemailclient_officials, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void OnWebsiteClicked(View view) {
+        if(officials!=null && !officials.getOfficials_url().isEmpty()){
+            openUrl(officials.getOfficials_url());
+        }
     }
 
     public void OnFacebookClicked(View view) {
+        String FACEBOOK_URL = "";
+        String urlToUse="";
+        Channels channels = null;
+        PackageManager packageManager = getPackageManager();
+        try {
+            if (officials != null && officials.getOfficials_channels().size() > 0) {
+                for (int i = 0; i < officials.getOfficials_channels().size(); i++) {
+                    channels = officials.getOfficials_channels().get(i);
+                    if (channels.getChannels_id() != null && !channels.getChannels_id().isEmpty()) {
+                        if (channels.getChannels_type().toUpperCase().contains("FACEBOOK")) {
+                            FACEBOOK_URL = "https://www.facebook.com/" + channels.getChannels_id();
+                        }
+                    }
+                }
+            }
+            if(!FACEBOOK_URL.isEmpty()) {
+                int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+                if (versionCode >= 3002850) { //newer versions of fb app
+                    urlToUse = "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+                } else { //older versions of fb app
+                    urlToUse = "fb://page/" + channels.getChannels_id();
+                }
+            }
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            urlToUse = FACEBOOK_URL; //normal web url
+        }
+        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+        facebookIntent.setData(Uri.parse(urlToUse));
+        startActivity(facebookIntent);
+
     }
 
     public void OnTwitterClicked(View view) {
+        Intent intent = null;
+        String twitterID="";
+        try {
+            if (officials != null && officials.getOfficials_channels().size() > 0) {
+                for (int i = 0; i < officials.getOfficials_channels().size(); i++) {
+                    Channels channels = officials.getOfficials_channels().get(i);
+                    if (channels.getChannels_id() != null && !channels.getChannels_id().isEmpty()) {
+                        if (channels.getChannels_type().toUpperCase().contains("TWITTER")) {
+                            twitterID = channels.getChannels_id();
+                        }
+                    }
+                }
+            }
+            if(!twitterID.isEmpty()) {
+                getPackageManager().getPackageInfo("com.twitter.android", 0);
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=" + twitterID));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+        }
+        catch (Exception e) {
+            // no Twitter app, revert to browser
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/" + twitterID));
+        }
+        startActivity(intent);
     }
 
     public void OnYoutubeClicked(View view) {
+        Intent intent = null;
+        String youtubeID="";
+        try {
+            if (officials != null && officials.getOfficials_channels().size() > 0) {
+                for (int i = 0; i < officials.getOfficials_channels().size(); i++) {
+                    Channels channels = officials.getOfficials_channels().get(i);
+                    if (channels.getChannels_id() != null && !channels.getChannels_id().isEmpty()) {
+                        if (channels.getChannels_type().toUpperCase().contains("YOUTUBE")) {
+                            youtubeID = channels.getChannels_id();
+                        }
+                    }
+                }
+            }
+            if(!youtubeID.isEmpty()) {
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setPackage("com.google.android.youtube");
+                intent.setData(Uri.parse("https://www.youtube.com/" + youtubeID));
+                startActivity(intent);
+            }
+        }
+        catch (ActivityNotFoundException e) {
+            // no Twitter app, revert to browser
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/" + youtubeID)));
+        }
+    }
+
+    public void openUrl(String url) {
+        if (url != null && !url.isEmpty()) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(i);
+        }
     }
 }

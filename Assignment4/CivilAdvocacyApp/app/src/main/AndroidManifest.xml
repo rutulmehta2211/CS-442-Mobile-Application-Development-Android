@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CivilAdvocacyApp">
         <activity
+            android:name=".PhotoActivity"
+            android:exported="false" />
+        <activity
             android:name=".OfficialActivity"
             android:exported="false" />
         <activity

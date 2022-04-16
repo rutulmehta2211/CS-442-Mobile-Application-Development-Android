@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,17 +43,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     private FusedLocationProviderClient mFusedLocationClient;
     private static final int LOCATION_REQUEST = 111;
-    private static String locationString = "Chicago, Illinois";
+    //private String locationString = ""; //Chicago, Illinois
     private CivicInformation civicInformation;
 
     TextView txtLocation;
     RecyclerView recyclerView;
     ConstraintLayout constraintLayout;
+
+    MainActivityAdapter mainActivityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +64,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtLocation = findViewById(R.id.txtLocation);
         recyclerView=findViewById(R.id.recyclerView);
         constraintLayout=findViewById(R.id.constraintLayout);
+
+        mainActivityAdapter = new MainActivityAdapter(MainActivity.this,civicInformation);
+        recyclerView.setAdapter(mainActivityAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         determineLocation();
-        loadData();
     }
 
     //Function to Check Network Connection
@@ -82,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
-                        locationString = getPlace(location);
+                        String locationString = getPlace(location);
+                        loadData(locationString);
                     }
                 })
                 .addOnFailureListener(this, e -> Toast.makeText(MainActivity.this,
@@ -90,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void loadData() {
-        if(!locationString.isEmpty()) {
+    public void loadData(String locationString) {
+        if(locationString!=null && !locationString.isEmpty()) {
             txtLocation.setText(locationString);
             if(hasNetworkConnection()) {
                 CivicInformationDownloader civicInformationDownloader = new CivicInformationDownloader(MainActivity.this,locationString);
@@ -134,7 +142,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return null;
             }
             Address ad = addresses.get(0);
-            return ad.getSubThoroughfare();
+            return ad.getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "getPlace: ", e);
+        }
+        return null;
+    }
+
+    private String getPlace(String loc) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(loc,1);
+            if(addresses.size()==0){
+                errorDialog(getString(R.string.no_location), getString(R.string.main_invalid_location));
+                return null;
+            }
+            Address ad = addresses.get(0);
+            return ad.getAddressLine(0);
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(TAG, "getPlace: ", e);
@@ -181,14 +207,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (et.getText().toString().isEmpty()) {
                             Toast.makeText(MainActivity.this, R.string.main_invalid_location, Toast.LENGTH_SHORT).show();
                         } else {
-                            if(hasNetworkConnection())
-                            {
-                                //Geocoder get letlong from the location
-                                //call google API
-                                //Set the values
+                            if(hasNetworkConnection()) {
+                                String locationString = getPlace(et.getText().toString());
+                                loadData(locationString);
                             }
-                            else
-                            {
+                            else {
                                 Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
@@ -212,14 +235,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         try {
-            Log.d(TAG, "onClick: ");
             int position = recyclerView.getChildLayoutPosition(view);
+            String officeName="";
+            Log.d(TAG, "onClick: "+position);
             Officials officials = civicInformation.getOfficials().get(position);
-            Offices offices = civicInformation.getOffices().get(position);
+            Offices offices;
+            for(int i=0;i<civicInformation.getOffices().size();i++) {
+                offices = civicInformation.getOffices().get(i);
+                if(offices.getOffices_officialIndices().contains(position)){
+                    officeName = offices.getOffices_name();
+                    break;
+                }
+            }
             if(hasNetworkConnection()) {
                 if (officials != null) {
                     Intent intent = new Intent(this, OfficialActivity.class);
-                    intent.putExtra("officeData",offices);
+                    intent.putExtra("officeName",officeName);
                     intent.putExtra("officialData", officials);
                     intent.putExtra("location", txtLocation.getText());
                     startActivity(intent);
@@ -236,17 +267,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public boolean onLongClick(View view) {
-        return false;
-    }
-
+    @SuppressLint("NotifyDataSetChanged")
     public void updateData(CivicInformation objCivicInformation) {
         if(objCivicInformation!=null){
             civicInformation = objCivicInformation;
-            MainActivityAdapter mainActivityAdapter = new MainActivityAdapter(MainActivity.this,objCivicInformation);
-            recyclerView.setAdapter(mainActivityAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//            MainActivityAdapter mainActivityAdapter = new MainActivityAdapter(MainActivity.this,objCivicInformation);
+//            recyclerView.setAdapter(mainActivityAdapter);
+//            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mainActivityAdapter.notifyDataSetChanged();
         }
     }
 }

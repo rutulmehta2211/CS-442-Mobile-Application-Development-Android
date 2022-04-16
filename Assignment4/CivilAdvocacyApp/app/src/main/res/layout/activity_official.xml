@@ -84,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtparty_official"
-            app:srcCompat="@drawable/placeholder" />
+            app:srcCompat="@drawable/missing" />
 
         <ImageView
             android:id="@+id/imgparty_official"
@@ -94,7 +94,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/imgphoto_official"
             app:layout_constraintEnd_toEndOf="@+id/imgphoto_official"
             app:layout_constraintStart_toStartOf="@+id/imgphoto_official"
-            app:srcCompat="@drawable/placeholder" />
+            app:srcCompat="@drawable/missing" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"

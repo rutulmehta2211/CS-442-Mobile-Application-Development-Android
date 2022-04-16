@@ -25,7 +25,6 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityViewHo
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_main_row, parent, false);
         itemView.setOnClickListener(mainActivity);
-        itemView.setOnLongClickListener(mainActivity);
 
         return new MainActivityViewHolder(itemView);
     }
@@ -34,11 +33,14 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityViewHo
     @Override
     public void onBindViewHolder(@NonNull MainActivityViewHolder holder, int position) {
         try {
-            Offices offices = civicInformation.getOffices().get(position);
-            holder.txtOfficeName.setText(offices.getOffices_name());
-            for(int i=0; i<offices.getOffices_officialIndices().size();i++) {
-                Officials officials = civicInformation.getOfficials().get(offices.getOffices_officialIndices().get(i));
-                holder.txtOfficialNameAndParty.setText(officials.getOfficials_name() + " (" + officials.getOfficials_party() + ") ");
+            Officials officials = civicInformation.getOfficials().get(position);
+            holder.txtOfficialNameAndParty.setText(officials.getOfficials_name() + " (" + officials.getOfficials_party() + ") ");
+            for(int i=0;i<civicInformation.getOffices().size();i++) {
+                Offices offices = civicInformation.getOffices().get(i);
+                if(offices.getOffices_officialIndices().contains(position)){
+                    holder.txtOfficeName.setText(offices.getOffices_name());
+                    break;
+                }
             }
         }
         catch (Exception e){
@@ -49,11 +51,13 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityViewHo
     @Override
     public int getItemCount() {
         try{
-            return civicInformation.getOffices().size();
+            if(civicInformation!=null){
+                return civicInformation.getOfficials().size();
+            }
         }
         catch (Exception e) {
             Log.e(TAG, "getItemCount: ", e);
-            return 0;
         }
+        return 0;
     }
 }
