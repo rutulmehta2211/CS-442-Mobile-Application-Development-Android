@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView=findViewById(R.id.recyclerView);
         constraintLayout=findViewById(R.id.constraintLayout);
 
-        mainActivityAdapter = new MainActivityAdapter(MainActivity.this,civicInformation);
-        recyclerView.setAdapter(mainActivityAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mainActivityAdapter = new MainActivityAdapter(MainActivity.this,civicInformation);
+        //recyclerView.setAdapter(mainActivityAdapter);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         determineLocation();
@@ -93,8 +93,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         loadData(locationString);
                     }
                 })
-                .addOnFailureListener(this, e -> Toast.makeText(MainActivity.this,
-                        e.getMessage(), Toast.LENGTH_LONG).show());
+                .addOnFailureListener(this, e -> {
+                    Toast.makeText(MainActivity.this,
+                            e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                    Log.e(TAG, "determineLocation: ", e);
+                });
 
     }
 
@@ -271,10 +275,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void updateData(CivicInformation objCivicInformation) {
         if(objCivicInformation!=null){
             civicInformation = objCivicInformation;
-//            MainActivityAdapter mainActivityAdapter = new MainActivityAdapter(MainActivity.this,objCivicInformation);
-//            recyclerView.setAdapter(mainActivityAdapter);
-//            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mainActivityAdapter.notifyDataSetChanged();
+            mainActivityAdapter = new MainActivityAdapter(MainActivity.this,objCivicInformation);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(mainActivityAdapter);
+            //mainActivityAdapter.notifyDataSetChanged();
         }
     }
 }

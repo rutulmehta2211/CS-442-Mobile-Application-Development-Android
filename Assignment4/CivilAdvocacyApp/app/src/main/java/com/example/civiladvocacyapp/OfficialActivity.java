@@ -220,44 +220,48 @@ public class OfficialActivity extends AppCompatActivity {
     }
 
     public void OnAddressClicked(View view) {
-        if(officials!=null && !officials.getOfficials_address().isEmpty()){
-            String address = officials.getOfficials_address() + " " + officials.getOfficials_city() + ", " + officials.getOfficials_state() + " " + officials.getOfficials_zip();
-            Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
-            Intent intent = new Intent(Intent.ACTION_VIEW, mapUri);
-            intent.setPackage("com.google.android.apps.maps");
-
-            if (intent.resolveActivity(getPackageManager()) != null) {
+        try {
+            if(officials!=null && !officials.getOfficials_address().isEmpty()){
+                String address = officials.getOfficials_address() + " " + officials.getOfficials_city() + ", " + officials.getOfficials_state() + " " + officials.getOfficials_zip();
+                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                Intent intent = new Intent(Intent.ACTION_VIEW, mapUri);
+                intent.setPackage("com.google.android.apps.maps");
                 startActivity(intent);
-            } else {
-                Toast.makeText(OfficialActivity.this, R.string.nomapapplication_official, Toast.LENGTH_SHORT).show();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(OfficialActivity.this, R.string.nomapapplication_official, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "OnAddressClicked: ",e );
         }
     }
 
     public void OnPhoneClicked(View view) {
-        if(officials!=null && !officials.getOfficials_phone().isEmpty()){
-            String number = officials.getOfficials_phone();
-            Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:" + number));
-
-            if (intent.resolveActivity(getPackageManager()) != null) {
+        try {
+            if(officials!=null && !officials.getOfficials_phone().isEmpty()){
+                String number = officials.getOfficials_phone();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + number));
                 startActivity(intent);
-            } else {
-                Toast.makeText(OfficialActivity.this, R.string.nocallapplication_officials, Toast.LENGTH_SHORT).show();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(OfficialActivity.this, R.string.nocallapplication_officials, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "OnPhoneClicked: ", e);
         }
     }
 
     public void OnEmailClicked(View view) {
-        if (officials!=null && !officials.getOfficials_email().isEmpty()) {
-            String[] addresses = new String[]{officials.getOfficials_email()};
-            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
-            intent.putExtra(Intent.EXTRA_EMAIL, addresses);
-            if (intent.resolveActivity(getPackageManager()) != null) {
+        try {
+            if (officials!=null && !officials.getOfficials_email().isEmpty()) {
+                String[] addresses = new String[]{officials.getOfficials_email()};
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
+                intent.putExtra(Intent.EXTRA_EMAIL, addresses);
                 startActivity(intent);
-            } else {
-                Toast.makeText(OfficialActivity.this, R.string.noemailclient_officials, Toast.LENGTH_SHORT).show();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(OfficialActivity.this, R.string.noemailclient_officials, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "OnEmailClicked: ", e);
         }
     }
 

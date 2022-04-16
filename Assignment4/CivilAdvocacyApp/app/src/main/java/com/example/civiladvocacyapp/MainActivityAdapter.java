@@ -51,9 +51,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityViewHo
     @Override
     public int getItemCount() {
         try{
-            if(civicInformation!=null){
+                Log.d(TAG, "getItemCount: "+civicInformation.getOfficials().size());
                 return civicInformation.getOfficials().size();
-            }
         }
         catch (Exception e) {
             Log.e(TAG, "getItemCount: ", e);

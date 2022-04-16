@@ -43,7 +43,7 @@
             android:textColor="@color/white"
             android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtLocation_official" />
 
@@ -56,7 +56,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtoffice_official" />
 
@@ -64,25 +64,24 @@
             android:id="@+id/txtparty_official"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:text="@string/official_party"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtname_official" />
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/txtLocation_official" />
 
         <ImageView
             android:id="@+id/imgphoto_official"
             android:layout_width="0dp"
-            android:layout_height="350dp"
-            android:layout_marginStart="24dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="8dp"
             android:onClick="OnImageClicked"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/txtparty_official"
             app:srcCompat="@drawable/missing" />
 
@@ -101,7 +100,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.35" />
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.65" />
 
         <TextView
             android:id="@+id/txtaddresslabel_official"
@@ -116,7 +122,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgphoto_official" />
+            app:layout_constraintTop_toBottomOf="@+id/txtname_official" />
 
         <TextView
             android:id="@+id/txtaddress_official"
@@ -129,7 +135,7 @@
             android:text="TextView"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="@+id/txtaddresslabel_official" />
 
@@ -141,10 +147,10 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/txtphone_official"
+            app:layout_constraintBottom_toTopOf="@+id/txtemail_official"
             app:layout_constraintEnd_toEndOf="@+id/txtaddresslabel_official"
             app:layout_constraintStart_toStartOf="@+id/txtaddresslabel_official"
-            app:layout_constraintTop_toTopOf="@+id/txtphone_official" />
+            app:layout_constraintTop_toBottomOf="@+id/txtaddress_official" />
 
         <TextView
             android:id="@+id/txtphone_official"
@@ -164,13 +170,14 @@
             android:id="@+id/txtemaillabel_official"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/emaillabel_official"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/txtphonelabel_official"
             app:layout_constraintStart_toStartOf="@+id/txtphonelabel_official"
-            app:layout_constraintTop_toTopOf="@+id/txtemail_official" />
+            app:layout_constraintTop_toBottomOf="@+id/txtphonelabel_official"/>
 
         <TextView
             android:id="@+id/txtemail_official"
@@ -190,14 +197,14 @@
             android:id="@+id/txtwebsitelabel_official"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/websitelabel_official"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/txtwebsite_official"
             app:layout_constraintEnd_toEndOf="@+id/txtemaillabel_official"
             app:layout_constraintStart_toStartOf="@+id/txtemaillabel_official"
-            app:layout_constraintTop_toTopOf="@+id/txtwebsite_official" />
+            app:layout_constraintTop_toBottomOf="@+id/txtemaillabel_official"/>
 
         <TextView
             android:id="@+id/txtwebsite_official"
@@ -218,7 +225,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:onClick="OnFacebookClicked"
             android:scaleType="fitXY"
