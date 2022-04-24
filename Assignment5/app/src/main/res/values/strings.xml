@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NewsAggregator</string>
+    <string name="activity_articles_heading">News Article Heading</string>
+    <string name="activity_articles_date">News Article Date</string>
+    <string name="activity_articles_author">News Articles Authors</string>
+    <string name="activity_articles_Description">News articles Description</string>
+    <string name="main_activity_open_drawer">Open navigation drawer</string>
+    <string name="main_activity_close_drawer">Close navigation drawer</string>
+    <string name="no_internet">No Internet Connection !!</string>
+</resources>
