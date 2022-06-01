@@ -27,14 +27,8 @@ public class NewsArticlesDownloader implements Runnable{
     //https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=6b979057f3a5439f80e75ebf0bf8de4e
     private static final String URL = "https://newsapi.org/v2/top-headlines";
     private static final String APIKey = "6b979057f3a5439f80e75ebf0bf8de4e";
-    //private final NewsArticlesActivity newsArticlesActivity;
     private final MainActivity mainActivity;
     private final String sources;
-
-//    public NewsArticlesDownloader(NewsArticlesActivity newsArticlesActivity, String sources) {
-//        this.newsArticlesActivity = newsArticlesActivity;
-//        this.sources = sources;
-//    }
 
     public NewsArticlesDownloader(MainActivity mainActivity, String sources) {
         this.mainActivity = mainActivity;
@@ -44,38 +38,43 @@ public class NewsArticlesDownloader implements Runnable{
     @Override
     public void run() {
         Log.d(TAG, "run: ");
-        Uri.Builder buildURL = Uri.parse(URL).buildUpon();
-        buildURL.appendQueryParameter("sources", sources);
-        buildURL.appendQueryParameter("apikey", APIKey);
+        try {
+            Uri.Builder buildURL = Uri.parse(URL).buildUpon();
+            buildURL.appendQueryParameter("sources", sources);
+            buildURL.appendQueryParameter("apikey", APIKey);
 
-        String urlToUse = buildURL.build().toString();
-        JsonObjectRequest jsonObjectRequest =
-                new JsonObjectRequest(
-                        Request.Method.GET,
-                        urlToUse,
-                        null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                ArrayList<NewsArticles> lstNewsArticles = parseJSON(response.toString());
-                                mainActivity.runOnUiThread(() -> mainActivity.updateNewsArticlesData(lstNewsArticles));
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e(TAG, "onErrorResponse: ", error);
-                            }
-                        }){
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> headers = new HashMap<>();
-                        headers.put("User-Agent", "");
-                        return headers;
+            String urlToUse = buildURL.build().toString();
+            JsonObjectRequest jsonObjectRequest =
+                    new JsonObjectRequest(
+                            Request.Method.GET,
+                            urlToUse,
+                            null,
+                            new Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    ArrayList<NewsArticles> lstNewsArticles = parseJSON(response.toString());
+                                    mainActivity.runOnUiThread(() -> mainActivity.updateNewsArticlesData(lstNewsArticles));
+                                }
+                            },
+                            new ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e(TAG, "onErrorResponse: ", error);
+                                }
+                            }){
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = new HashMap<>();
+                            headers.put("User-Agent", "");
+                            return headers;
+                        };
                     };
-                };
-        RequestQueue queue = Volley.newRequestQueue(mainActivity);
-        queue.add(jsonObjectRequest);
+            RequestQueue queue = Volley.newRequestQueue(mainActivity);
+            queue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "run: ", e);
+        }
     }
 
     private ArrayList<NewsArticles> parseJSON(String s) {
