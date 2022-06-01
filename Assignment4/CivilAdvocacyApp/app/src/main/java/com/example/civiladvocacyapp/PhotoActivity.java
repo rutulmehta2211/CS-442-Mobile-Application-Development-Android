@@ -34,8 +34,8 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo);
         getSupportActionBar().setTitle(R.string.civil_advocacy_about);
         picasso = Picasso.get();
-        picasso.setIndicatorsEnabled(true);
-        picasso.setLoggingEnabled(true);
+        //picasso.setIndicatorsEnabled(true);
+        //picasso.setLoggingEnabled(true);
         InitializeControls();
         LoadData();
     }

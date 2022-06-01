@@ -64,8 +64,8 @@ public class OfficialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_official);
         getSupportActionBar().setTitle(R.string.civil_advocacy_about);
         picasso = Picasso.get();
-        picasso.setIndicatorsEnabled(true);
-        picasso.setLoggingEnabled(true);
+        //picasso.setIndicatorsEnabled(true);
+        //picasso.setLoggingEnabled(true);
         InitializeControls();
         LoadData();
     }
